@@ -126,6 +126,18 @@ class SupersetTestCase(unittest.TestCase):
             raise Exception("http request failed with code {}".format(resp.status_code))
         return resp.data.decode("utf-8")
 
+    def get_binary_resp(
+        self, url, data=None, follow_redirects=True, raise_on_error=True
+    ):
+        """Shortcut to get the parsed results while following redirects"""
+        if data:
+            resp = self.client.post(url, data=data, follow_redirects=follow_redirects)
+        else:
+            resp = self.client.get(url, follow_redirects=follow_redirects)
+        if raise_on_error and resp.status_code > 400:
+            raise Exception("http request failed with code {}".format(resp.status_code))
+        return resp.data
+
     def get_json_resp(self, url, data=None, follow_redirects=True, raise_on_error=True):
         """Shortcut to get the parsed results while following redirects"""
         resp = self.get_resp(url, data, follow_redirects, raise_on_error)

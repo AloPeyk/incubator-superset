@@ -261,6 +261,11 @@ ALLOWED_EXTENSIONS = set(["csv"])
 # note: index option should not be overridden
 CSV_EXPORT = {"encoding": "utf-8"}
 
+# XLSX Options: key/value pairs that will be passed as argument to DataFrame.to_excel
+# method.
+# note: index option should not be overridden
+XLSX_EXPORT = {"encoding": "utf-8"}
+
 # ---------------------------------------------------
 # Time grain configurations
 # ---------------------------------------------------
