@@ -480,6 +480,31 @@ class CoreTests(SupersetTestCase):
         self.assertEqual(list(expected_data), list(data))
         self.logout()
 
+    def test_xlsx_endpoint(self):
+        self.login("admin")
+        sql = """
+            SELECT first_name, last_name
+            FROM ab_user
+            WHERE first_name='admin'
+        """
+        client_id = "{}".format(random.getrandbits(64))[:10]
+        self.run_sql(sql, client_id, raise_on_error=True)
+
+        resp = self.get_binary_resp("/superset/xlsx/{}".format(client_id))
+        data = pd.read_excel(io.BytesIO(resp)).to_dict()
+        expected_data = {"first_name": {0: "admin"}, "last_name": {0: "user"}}
+
+        sql = "SELECT first_name FROM ab_user WHERE first_name LIKE '%admin%'"
+        client_id = "{}".format(random.getrandbits(64))[:10]
+        self.run_sql(sql, client_id, raise_on_error=True)
+
+        resp = self.get_binary_resp("/superset/xlsx/{}".format(client_id))
+        data = pd.read_excel(io.BytesIO(resp)).to_dict()
+        expected_data = {"first_name": {0: "admin"}}
+
+        self.assertEqual(list(expected_data), list(data))
+        self.logout()
+
     def test_extra_table_metadata(self):
         self.login("admin")
         dbid = utils.get_main_database().id
