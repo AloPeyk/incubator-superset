@@ -79,7 +79,10 @@ setup(
         "flask-talisman",
         "flask-migrate",
         "flask-wtf",
+        "xlrd",
+        "xlwt",
         "geopy",
+        "openpyxl",
         "gunicorn",  # deprecated
         "humanize",
         "idna",
